@@ -48,13 +48,26 @@ def generate_qr():
     name = name_entry.get()
     designation = designation_entry.get()
     phone = phone_entry.get()
+    company = company_entry.get()
+    email = email_entry.get()
 
-    if not name or not designation or not phone:
+    if not name or not designation or not phone or not company or not email:
         messagebox.showerror("Error", "Please fill in all fields.")
         return
 
-    qr_data = f"Name: {name}\nDesignation: {designation}\nPhone: {phone}"
-    img = qrcode.make(qr_data)
+    # Constructing vCard data with name, company, designation, phone, and email
+    vcard_data = f"""BEGIN:VCARD
+VERSION:3.0
+FN:{name}
+TITLE;CHARSET=UTF-8:{designation}
+ORG;CHARSET=UTF-8:{company}
+TEL;TYPE=cell:{phone}
+EMAIL;TYPE=work:{email}
+END:VCARD"""
+
+
+
+    img = qrcode.make(vcard_data)
     img = img.resize((150, 150))
 
     preview_img = ImageTk.PhotoImage(img)
@@ -65,17 +78,30 @@ def save_qr():
     name = name_entry.get()
     designation = designation_entry.get()
     phone = phone_entry.get()
+    company = company_entry.get()
+    email = email_entry.get()
 
-    if not name or not designation or not phone:
+    if not name or not designation or not phone or not company or not email:
         messagebox.showerror("Error", "Please fill in all fields.")
         return
 
-    qr_data = f"Name: {name}\nDesignation: {designation}\nPhone: {phone}"
+    # Constructing vCard data with name, company, designation, phone, and email
+    vcard_data = f"""BEGIN:VCARD
+VERSION:3.0
+FN:{name}
+TITLE;CHARSET=UTF-8:{designation}
+ORG;CHARSET=UTF-8:{company}
+TEL;TYPE=cell:{phone}
+EMAIL;TYPE=work:{email}
+END:VCARD"""
+
+
+
     file_path = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("PNG files", "*.png")])
     if not file_path:
         return
 
-    img = qrcode.make(qr_data)
+    img = qrcode.make(vcard_data)
     img.save(file_path)
     messagebox.showinfo("Success", f"QR Code saved to:\n{file_path}")
 
@@ -85,7 +111,7 @@ root.title("Heisencorp's QR Code Generator")
 root.iconbitmap(resource_path("qr.ico"))
 
 main_width = 700
-main_height = 350
+main_height = 400
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 x_main = (screen_width // 2) - (main_width // 2)
@@ -111,6 +137,14 @@ designation_entry.grid(row=1, column=1, pady=5)
 tk.Label(form_frame, text="Phone:", font=("Arial", 12)).grid(row=2, column=0, pady=5, sticky="w")
 phone_entry = tk.Entry(form_frame, width=40, font=("Arial", 11))
 phone_entry.grid(row=2, column=1, pady=5)
+
+tk.Label(form_frame, text="Company:", font=("Arial", 12)).grid(row=3, column=0, pady=5, sticky="w")
+company_entry = tk.Entry(form_frame, width=40, font=("Arial", 11))
+company_entry.grid(row=3, column=1, pady=5)
+
+tk.Label(form_frame, text="Email:", font=("Arial", 12)).grid(row=4, column=0, pady=5, sticky="w")
+email_entry = tk.Entry(form_frame, width=40, font=("Arial", 11))
+email_entry.grid(row=4, column=1, pady=5)
 
 # Right preview section
 preview_frame = tk.Frame(frame, width=150, height=150, bg="lightgray")
