@@ -1,4 +1,4 @@
-# 🧾 Heisen QR Code Generator
+# 🧾 Heisencorp's QR Code Generator
 
 A Python GUI desktop app that generates QR codes from user input using Tkinter and the `qrcode` library. Includes a splash screen for a clean startup experience.
 
