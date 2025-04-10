@@ -2,11 +2,22 @@ import qrcode
 import tkinter as tk
 from tkinter import messagebox, filedialog
 from PIL import Image, ImageTk
+import os
+import sys
+
+# ---------- Helper Function for Resource Path ----------
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        base_path = sys._MEIPASS  # When bundled by PyInstaller
+    except Exception:
+        base_path = os.path.abspath(".")  # When running as script
+    return os.path.join(base_path, relative_path)
 
 # ---------- Splash Screen ----------
 splash_root = tk.Tk()
 splash_root.overrideredirect(True)  # No title bar
-splash_root.iconbitmap("qr.ico")  # Custom icon
+splash_root.iconbitmap(resource_path("qr.ico"))  # Custom icon
 
 # Splash screen dimensions
 splash_width = 800
@@ -22,7 +33,7 @@ canvas = tk.Canvas(splash_root, width=splash_width, height=splash_height, bd=0, 
 canvas.pack()
 
 # Load splash image
-splash_img = Image.open("heisen_cover.png")
+splash_img = Image.open(resource_path("heisen_cover.png"))
 splash_img = splash_img.resize((splash_width, splash_height))
 splash_photo = ImageTk.PhotoImage(splash_img)
 splash_label = tk.Label(canvas, image=splash_photo)
@@ -71,7 +82,7 @@ def save_qr():
 # Main window
 root = tk.Tk()
 root.title("Heisencorp's QR Code Generator")
-root.iconbitmap("qr.ico")
+root.iconbitmap(resource_path("qr.ico"))
 
 main_width = 700
 main_height = 350
